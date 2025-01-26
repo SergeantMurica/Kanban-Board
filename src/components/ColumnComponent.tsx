@@ -22,8 +22,6 @@ function ColumnComponent(props: Props) {
 
 
     const {column, deleteColumn, updateColumn, tasks, createTask, deleteTask, updateTask} = props;
-
-
     const [editMode, setEditMode] = useState(false);
 
 

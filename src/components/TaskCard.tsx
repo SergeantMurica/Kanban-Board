@@ -44,7 +44,26 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
 
     if (isDragging) {
         return (
-            <div>Dragging</div>
+            <div
+                ref={setNodeRef}
+                style={style}
+                className="
+                bg-(--background-color)
+                p-2.5
+                h-[100px]
+                min-h-[100px]
+                items-center
+                flex
+                text-left
+                rounded-xl
+                hover:ring-2
+                hover:ring-inset
+                hover:ring-rose-500
+                cursor-grab
+                relative"
+            >
+                Dragging
+            </div>
         )
     }
 

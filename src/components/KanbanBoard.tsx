@@ -3,7 +3,7 @@ import { Column, Id, Task } from "../types.js"
 import ColumnComponent from "./ColumnComponent.tsx";
 import {
     DndContext,
-    DragEndEvent,
+    DragEndEvent, DragOverEvent,
     DragOverlay,
     DragStartEvent,
     PointerSensor,
@@ -13,6 +13,7 @@ import {
 import {arrayMove, SortableContext} from "@dnd-kit/sortable";
 import {createPortal} from "react-dom";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import TaskCard from "./TaskCard.tsx";
 
 
 
@@ -20,12 +21,17 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
 const KanbanBoard = () => {
+
     const [columns, setColumns] = useState<Column[]>([]);
     const columnsId = useMemo(() => columns.map((column) => column.id), [columns]);
+    const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+
 
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [activeTask, setActiveTask] = useState<Task | null>(null);
 
-    const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+
+
 
     const sensors = useSensors(useSensor(PointerSensor, {
             activationConstraint: {
@@ -52,6 +58,7 @@ const KanbanBoard = () => {
                 sensors={sensors}
                 onDragStart={dragStart}
                 onDragEnd={dragEnd}
+                onDragOver={dragOver}
             >
                 <div className="m-auto flex gap-4">
                     <div className="flex gap-4">
@@ -106,6 +113,9 @@ const KanbanBoard = () => {
                                 updateTask={updateTask}
                             />
                         )}
+                        {activeTask && (
+                            <TaskCard task={activeTask} deleteTask={deleteTask} updateTask={updateTask}/>
+                        )}
                     </DragOverlay>,
                     document.body
                 )}
@@ -114,7 +124,7 @@ const KanbanBoard = () => {
     );
 
 
-    {/*COLUMNS*/}
+    /*COLUMNS*/
     function createNewColumn() {
         const columnToAdd: Column = {
             id: generateId(),
@@ -130,7 +140,9 @@ const KanbanBoard = () => {
 
     function deleteColumn(id: Id) {
         const columnToDelete = columns.filter((column) => column.id !== id);
+        const tasksToDelete = tasks.filter((tasks) => tasks.id !== id);
         setColumns(columnToDelete);
+        setTasks(tasksToDelete);
     }
 
     function updateColumn(id: Id, title: string) {
@@ -142,7 +154,7 @@ const KanbanBoard = () => {
     }
 
 
-    {/*TASKS*/}
+    /*TASKS*/
 
     function createTask(columnId: Id) {
         const newTask: Task = {
@@ -168,34 +180,93 @@ const KanbanBoard = () => {
 
 
 
-    {/*DRAGGING*/}
+    /*DRAGGING*/
 
     function dragStart(event: DragStartEvent) {
-        console.log("Dragging", event);
+
         if (event.active.data.current?.type === "Column") {
             setActiveColumn(event.active.data.current.column);
+            return;
+        }
+        if (event.active.data.current?.type === "Task") {
+            setActiveTask(event.active.data.current.task);
             return;
         }
     }
 
     function dragEnd(event: DragEndEvent) {
+        setActiveColumn(null)
+        setActiveTask(null)
         const { active, over } = event;
 
         if (!over) return;
 
-        const activeColumnId = active.id;
-        const overColumnId = over.id;
+        const activeId = active.id;
+        const overId = over.id;
 
-        if (activeColumnId === overColumnId) return;
+        if (activeId === overId) return;
+
 
         setColumns((columns) => {
-            const activeColumnIndex = columns.findIndex((columns) => columns.id === activeColumnId);
 
-            const overColumnIndex = columns.findIndex((columns) => columns.id === overColumnId);
+            const activeColumnIndex = columns.findIndex((columns) => columns.id === activeId);
+
+            const overColumnIndex = columns.findIndex((columns) => columns.id === overId);
+
 
             return arrayMove(columns, activeColumnIndex, overColumnIndex);
 
         });
+
+
+    }
+
+
+    function dragOver(event: DragOverEvent) {
+        const { active, over } = event;
+
+        if (!over) return;
+
+        const activeId = active.id;
+        const overId = over.id;
+
+        if (activeId === overId) return;
+
+        const isActiveTask = active.data.current?.type === "Task";
+        const isOverTask = over.data.current?.type === "Task";
+
+        if (!isActiveTask) return;
+
+        if (isActiveTask && isOverTask) {
+
+            setTasks((tasks) => {
+
+                const activeIndex = tasks.findIndex((tasks) => tasks.id === activeId);
+
+                const overIndex = tasks.findIndex((tasks) => tasks.id === overId);
+
+                tasks[activeIndex].columnId = tasks[overIndex].columnId;
+
+                return arrayMove(tasks, activeIndex, overIndex);
+
+            });
+        }
+
+        const isOverColumn = over.data.current?.type === "Column";
+
+        if (isActiveTask && isOverColumn) {
+
+            setTasks((tasks) => {
+
+                const activeIndex = tasks.findIndex((tasks) => tasks.id === activeId);
+
+                tasks[activeIndex].columnId = overId;
+
+                return arrayMove(tasks, activeIndex, activeIndex);
+
+            });
+
+        }
 
     }
 
