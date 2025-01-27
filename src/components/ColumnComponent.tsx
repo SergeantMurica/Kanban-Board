@@ -50,16 +50,12 @@ function ColumnComponent(props: Props) {
                 ref={setNodeRef}
                 style={style}
                 className="
-                flex
-                flex-col
-                gap-4
-                w-[350px]
-                h-[500px]
-                rounded-md
-                bg-(--base-color)
-                opacity-60
-                border-2
-                border-gray-200 
+                min-w-[320px]
+                max-w-[320px]
+                h-[550px]
+                bg-gray-100 dark:bg-gray-900
+                rounded-lg
+                border border-rose-400 dark:border-rose-600
                 ">
 
             </div>
@@ -76,10 +72,13 @@ function ColumnComponent(props: Props) {
             flex
             flex-col
             gap-4
-            w-[350px]
-            h-[500px]
-            rounded-md
-            bg-(--base-color)
+            min-w-[320px] max-w-[320px]
+            h-[550px]
+            bg-white dark:bg-gray-800
+            rounded-lg
+            shadow-lg
+            border border-gray-200 dark:border-gray-700
+            overflow-hidden
             ">
 
             {/* Column Title*/}
@@ -93,16 +92,15 @@ function ColumnComponent(props: Props) {
                 text-md
                 h-[60px]
                 cursor-grab
-                rounded-md
-                rounded-b-none
-                bg-(--base-color)
-                border-(--main-outline-color)
-                p-3
+                bg-gray-400 dark:bg-gray-700
+                border-b border-gray-200 dark:border-gray-600
+                px-4
+                py-3
                 font-bold
-                border-4
                 flex
                 items-center
                 justify-between
+                text-gray-900 dark:text-gray-200
                 ">
                 <div className="flex gap-2">
                     <div
@@ -110,13 +108,11 @@ function ColumnComponent(props: Props) {
                         flex
                         items-center
                         justify-center
-                        bg-(--base-color)
                         px-2
                         py-1
                         text-small
                         rounded-full
                         ">
-                        0
                     </div>
                     {!editMode && column.title}
                     {editMode && (
@@ -142,8 +138,10 @@ function ColumnComponent(props: Props) {
                         deleteColumn(column.id);
                     }}
                     className="
+                    text-gray-400 dark:text-gray-500
+                    hover:text-gray-300
                     stroke-gray-500
-                    hover:stroke-white
+                    hover:stroke-rose-500
                     "
                 ><DeleteOutlineIcon/></button>
             </div>
@@ -157,6 +155,7 @@ function ColumnComponent(props: Props) {
             p-2
             overflow-x-hidden
             overflow-y-auto
+            scroll-smooth
             ">
                 <SortableContext items={taskIds}>
                     {tasks.map((task) => (
@@ -172,11 +171,15 @@ function ColumnComponent(props: Props) {
                     flex
                     gap-2
                     items-center
+                    justify-center
                     rounded-md
                     p-4
-                    border-x-(--background-color)
-                    hover:bg-(--base-color)
-                    hover:text-rose-500
+                    bg-white dark:bg-gray-800
+                    text-gray-400 dark:text-gray-500
+                    hover:text-gray-300
+                    stroke-gray-500
+                    hover:stroke-rose-500
+                    transition-all
                     "
                     onClick={() =>{createTask(column.id)}}
                 >

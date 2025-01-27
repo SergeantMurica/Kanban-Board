@@ -35,7 +35,7 @@ const KanbanBoard = () => {
 
     const sensors = useSensors(useSensor(PointerSensor, {
             activationConstraint: {
-            distance: 5,
+            distance: 3,
             },
         })
     );
@@ -46,13 +46,17 @@ const KanbanBoard = () => {
             className="
             m-auto
             flex
+            justify-start
+            items-start
             min-h-screen
             w-full
-            bg-(--background-color)
-            items-center
+            bg-gray-100 dark:bg-gray-900
+            gap-6
+            p-6
             overflow-x-auto
-            overflow-y-hidden
-            px-[40px]
+            scroll-smooth
+            rounded-lg
+            shadow-inner
             ">
             <DndContext
                 sensors={sensors}
@@ -88,13 +92,18 @@ const KanbanBoard = () => {
                         cursor-pointer
                         rounded-lg
                         hover:ring-2
-                        bg-(--base-color)
-                        border-2
-                        border-(--main-outline-color)
-                        p-4
-                        ring-rose-500
+                        ring-gray-500
                         flex
                         gap-2
+                        text-md
+                        flex
+                        items-center
+                        bg-gray-400 dark:bg-gray-700
+                        border-b border-gray-200 dark:border-gray-600
+                        px-4
+                        py-3
+                        font-bold
+                        text-gray-900 dark:text-gray-200
                         ">
                         <AddCircleOutlineIcon/>
                         Add Column
@@ -205,6 +214,11 @@ const KanbanBoard = () => {
         const overId = over.id;
 
         if (activeId === overId) return;
+
+        const isActiveTask = active.data.current?.type === "Task";
+        const isOverTask = over.data.current?.type === "Task";
+
+        if (isActiveTask && isOverTask || !activeId) return;
 
 
         setColumns((columns) => {

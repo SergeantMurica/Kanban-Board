@@ -48,21 +48,12 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
                 ref={setNodeRef}
                 style={style}
                 className="
-                bg-(--background-color)
-                p-2.5
+                p-3
                 h-[100px]
-                min-h-[100px]
-                items-center
-                flex
-                text-left
-                rounded-xl
-                hover:ring-2
-                hover:ring-inset
-                hover:ring-rose-500
-                cursor-grab
-                relative"
+                bg-white dark:bg-gray-800
+                rounded-lg
+                border border-rose-400 dark:border-rose-600"
             >
-                Dragging
             </div>
         )
     }
@@ -76,19 +67,22 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
                 {...attributes}
                 {...listeners}
                 className="
-                bg-(--background-color)
-                p-2.5
+                flex
+                items-center
+                justify-between
+                p-3
                 h-[100px]
                 min-h-[100px]
-                items-center
-                flex
-                text-left
-                rounded-xl
-                hover:ring-2
-                hover:ring-inset
-                hover:ring-rose-500
+                rounded-lg
+                bg-gray-50 dark:bg-gray-800
+                border border-gray-200 dark:border-gray-600
+                shadow-sm
+                hover:shadow-md
+                hover:ring-2 hover:ring-rose-500
                 cursor-grab
-                relative"
+                transition-all
+                relative
+                task"
                 >
                 <textarea
                     className="
@@ -122,20 +116,22 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
             {...listeners}
             onClick={toggleEdit}
             className="
-                bg-(--background-color)
-                p-2.5
-                h-[100px]
-                min-h-[100px]
-                items-center
-                flex
-                text-left
-                rounded-xl
-                hover:ring-2
-                hover:ring-inset
-                hover:ring-rose-500
-                cursor-grab
-                relative
-                task"
+            flex
+            items-center
+            justify-between
+            p-3
+            h-[100px]
+            min-h-[100px]
+            rounded-lg
+            bg-gray-50 dark:bg-gray-800
+            border border-gray-200 dark:border-gray-600
+            shadow-sm
+            hover:shadow-md
+            hover:ring-2 hover:ring-rose-500
+            cursor-grab
+            transition-all
+            relative
+            task"
             onMouseEnter={() => {
                 setMouseIsOver(true);
             }}
@@ -148,6 +144,8 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
                 my-auto
                 h-[90%]
                 w-full
+                text-gray-800 dark:text-gray-200
+                text-md
                 overflow-y-auto
                 overflow-x-hidden
                 whitespace-pre-wrap"
@@ -160,14 +158,17 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
                         deleteTask(task.id);
                     }}
                     className="
-                    stroke-white
                     absolute
                     right-4
                     top-1/2
                     -translate-y-1/2
                     p-2
-                    rounded
-                    bg-(--background-color)"
+                    rounded-full
+                    text-gray-400 dark:text-gray-500
+                    hover:text-gray-300
+                    stroke-gray-500
+                    hover:stroke-rose-500
+                    transition-all"
                 >
                     <DeleteOutlineIcon/>
                 </button>
