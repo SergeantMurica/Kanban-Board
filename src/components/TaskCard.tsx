@@ -11,14 +11,17 @@ interface Props {
 }
 
 
-function TaskCard({task, deleteTask, updateTask} : Props) {
+function TaskCard(props: Props) {
+
+    const {task, deleteTask, updateTask} = props;
+
 
     const [mouseIsOver, setMouseIsOver] = useState<boolean>(false);
     const [editCard, setEditCard] = useState<boolean>(false);
 
 
-
-    {/*DRAGGING*/}
+    {/*DRAGGING*/
+    }
     const {setNodeRef, attributes, listeners, transform, transition, isDragging} = useSortable({
         id: task.id,
         data: {
@@ -34,7 +37,8 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
     };
 
 
-    {/*EDIT MODE*/}
+    {/*EDIT MODE*/
+    }
 
     const toggleEdit = () => {
         setEditCard(!editCard);
@@ -83,7 +87,7 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
                 transition-all
                 relative
                 task"
-                >
+            >
                 <textarea
                     className="
                     h-[90%]
@@ -101,7 +105,9 @@ function TaskCard({task, deleteTask, updateTask} : Props) {
                     onMouseDown={(e) => {
                         if (!mouseIsOver && e.button) toggleEdit();
                     }}
-                    onChange={(e) => {updateTask(task.id, e.target.value)}}
+                    onChange={(e) => {
+                        updateTask(task.id, e.target.value)
+                    }}
                 ></textarea>
             </div>
         )
