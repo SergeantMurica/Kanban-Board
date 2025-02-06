@@ -1,9 +1,10 @@
 import {useMemo, useState} from 'react'
-import { Column, Id, Task } from "../types.js"
+import {Column, Id, Task} from "../types.js"
 import ColumnComponent from "./ColumnComponent.tsx";
 import {
     DndContext,
-    DragEndEvent, DragOverEvent,
+    DragEndEvent,
+    DragOverEvent,
     DragOverlay,
     DragStartEvent,
     PointerSensor,
@@ -14,10 +15,6 @@ import {arrayMove, SortableContext} from "@dnd-kit/sortable";
 import {createPortal} from "react-dom";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import TaskCard from "./TaskCard.tsx";
-
-
-
-
 
 
 const KanbanBoard = () => {
@@ -31,11 +28,9 @@ const KanbanBoard = () => {
     const [activeTask, setActiveTask] = useState<Task | null>(null);
 
 
-
-
     const sensors = useSensors(useSensor(PointerSensor, {
             activationConstraint: {
-            distance: 3,
+                distance: 3,
             },
         })
     );
@@ -67,18 +62,18 @@ const KanbanBoard = () => {
                 <div className="m-auto flex gap-4">
                     <div className="flex gap-4">
                         <SortableContext items={columnsId}>
-                        {columns.map((column) => (
-                            <ColumnComponent
-                                column={column}
-                                key={column.id}
-                                deleteColumn={ deleteColumn }
-                                updateColumn ={ updateColumn }
-                                createTask={createTask}
-                                tasks={ tasks.filter((task) => task.columnId === column.id)}
-                                deleteTask={deleteTask}
-                                updateTask={updateTask}
-                            />
-                        ))}
+                            {columns.map((column) => (
+                                <ColumnComponent
+                                    column={column}
+                                    key={column.id}
+                                    deleteColumn={deleteColumn}
+                                    updateColumn={updateColumn}
+                                    createTask={createTask}
+                                    tasks={tasks.filter((task) => task.columnId === column.id)}
+                                    deleteTask={deleteTask}
+                                    updateTask={updateTask}
+                                />
+                            ))}
                         </SortableContext>
                     </div>
                     <button
@@ -115,9 +110,9 @@ const KanbanBoard = () => {
                             <ColumnComponent
                                 column={activeColumn}
                                 deleteColumn={deleteColumn}
-                                updateColumn ={ updateColumn }
+                                updateColumn={updateColumn}
                                 createTask={createTask}
-                                tasks={ tasks.filter((task) => task.columnId === activeColumn.id)}
+                                tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
                                 deleteTask={deleteTask}
                                 updateTask={updateTask}
                             />
@@ -157,7 +152,7 @@ const KanbanBoard = () => {
     function updateColumn(id: Id, title: string) {
         const newColumns = columns.map(column => {
             if (column.id !== id) return column;
-            return { ...column, title };
+            return {...column, title};
         });
         setColumns(newColumns);
     }
@@ -175,18 +170,17 @@ const KanbanBoard = () => {
     }
 
     function deleteTask(id: Id) {
-        const newTasks= tasks.filter((task) => task.id !== id);
+        const newTasks = tasks.filter((task) => task.id !== id);
         setTasks(newTasks);
     }
 
     function updateTask(id: Id, content: string) {
         const newTasks = tasks.map((task) => {
             if (task.id !== id) return task;
-            return { ...task, content };
+            return {...task, content};
         });
         setTasks(newTasks);
     }
-
 
 
     /*DRAGGING*/
@@ -206,7 +200,7 @@ const KanbanBoard = () => {
     function dragEnd(event: DragEndEvent) {
         setActiveColumn(null)
         setActiveTask(null)
-        const { active, over } = event;
+        const {active, over} = event;
 
         if (!over) return;
 
@@ -237,7 +231,7 @@ const KanbanBoard = () => {
 
 
     function dragOver(event: DragOverEvent) {
-        const { active, over } = event;
+        const {active, over} = event;
 
         if (!over) return;
 

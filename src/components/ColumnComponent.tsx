@@ -181,7 +181,9 @@ function ColumnComponent(props: Props) {
                     hover:stroke-rose-500
                     transition-all
                     "
-                    onClick={() =>{createTask(column.id)}}
+                    onClick={() => {
+                        createTask(column.id)
+                    }}
                 >
                     <AddCircleOutlineIcon/>
                     Add a task
